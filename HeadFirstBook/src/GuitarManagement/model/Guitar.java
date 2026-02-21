@@ -1,46 +1,20 @@
 package GuitarManagement.model;
 
-public class Guitar {
-    private String serialNumber,builder,model,type,backWood,topWood;
-    private double price;
+public class Guitar extends Instrument{
+    GuitarSpec guitarSpec;
+    public Guitar(String serialNumber, double guitarPrice,GuitarSpec guitarSpec) {
 
-    public Guitar(String serialNumber, double price,
-                  String builder, String model, String type,
-                  String backWood, String topWood) {
-        this.serialNumber = serialNumber;
-        this.price = price;
-        this.builder = builder;
-        this.model = model;
-        this.type = type;
-        this.backWood = backWood;
-        this.topWood = topWood;
+        super(serialNumber,guitarPrice);
+        this.guitarSpec=guitarSpec;
     }
 
-    public String getSerialNumber() {
-        return serialNumber;
+    public String toString() {
+        return super.toString()+
+                ", numOfString=" + guitarSpec.getNumOfStrings() +"}";
     }
 
-    public String getBuilder() {
-        return builder;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getBackWood() {
-        return backWood;
-    }
-
-    public String getTopWood() {
-        return topWood;
-    }
-
-    public double getPrice() {
-        return price;
+    @Override
+    public InstrumentSpec getSpec() {
+        return guitarSpec;
     }
 }
