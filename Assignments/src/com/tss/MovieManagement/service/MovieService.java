@@ -1,15 +1,18 @@
-package com.tss.MovieManagement;
+package com.tss.MovieManagement.service;
+
+import com.tss.MovieManagement.exceptions.CapacityFullException;
+import com.tss.MovieManagement.model.Movie;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieManager {
-    List<Movie> movies;
-    static final String filePath="moviesList.ser";
-    static final int CAPACITY=50;
+public class MovieService {
+    private List<Movie> movies;
+    private static final String filePath="moviesList.ser";
+    private static final int CAPACITY=50;
 
-    public MovieManager(){
+    public MovieService(){
         movies=new ArrayList<>();
         loadMovies();
     }
@@ -62,10 +65,7 @@ public class MovieManager {
     }
 
     public void deleteAllMovies(){
-//        try(FileOutputStream fOut= new FileOutputStream(filePath)){
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
+
         movies.clear();
         saveMovies();
     }
@@ -78,5 +78,9 @@ public class MovieManager {
             System.out.println("Year: "+movie.getYear());
             System.out.println("Genre: "+movie.getGenre());
         }
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
     }
 }

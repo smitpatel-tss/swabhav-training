@@ -1,4 +1,4 @@
-package com.tss.LibraryManagement;
+package com.tss.LibraryManagement.model;
 
 public class Member {
     private final int id;

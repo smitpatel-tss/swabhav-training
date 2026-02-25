@@ -1,4 +1,4 @@
-package com.tss.LibraryManagement;
+package com.tss.LibraryManagement.model;
 
 public class Book {
     private final int id;

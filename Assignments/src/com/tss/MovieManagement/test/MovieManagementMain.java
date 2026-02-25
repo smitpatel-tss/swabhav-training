@@ -1,8 +1,12 @@
-package com.tss.MovieManagement;
+package com.tss.MovieManagement.test;
+
+import com.tss.MovieManagement.exceptions.CapacityFullException;
+import com.tss.MovieManagement.exceptions.NoSuchMovieFoundException;
+import com.tss.MovieManagement.model.MovieController;
 
 import java.util.Scanner;
 
-public class MovieManagerApp {
+public class MovieManagementMain {
     static MovieController controller=new MovieController();
     static Scanner scanner=new Scanner(System.in);
 
@@ -15,19 +19,19 @@ public class MovieManagerApp {
 
             switch (choice){
                 case 1:
-                    controller.manager.displayAll();
+                    controller.getManager().displayAll();
                     break;
                 case 2:
                     createNewMovie();
                     break;
                 case 3:
-                    controller.manager.saveMovies();
+                    controller.getManager().saveMovies();
                     break;
                 case 4:
-                    controller.manager.clearMovies();
+                    controller.getManager().clearMovies();
                     break;
                 case 5:
-                    controller.manager.deleteAllMovies();
+                    controller.getManager().deleteAllMovies();
                     break;
                 case 6:
                     try {
@@ -55,7 +59,7 @@ public class MovieManagerApp {
         String genre=scanner.nextLine();
 
         try {
-            controller.manager.addMovie(name,year,genre);
+            controller.getManager().addMovie(name,year,genre);
         }catch (CapacityFullException e){
             System.out.println(e.getMessage());
         }

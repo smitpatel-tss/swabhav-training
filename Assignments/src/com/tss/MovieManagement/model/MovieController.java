@@ -1,14 +1,21 @@
-package com.tss.MovieManagement;
+package com.tss.MovieManagement.model;
+
+import com.tss.MovieManagement.exceptions.NoSuchMovieFoundException;
+import com.tss.MovieManagement.service.MovieService;
 
 import java.util.Scanner;
 
 
 public class MovieController {
-    MovieManager manager;
+    private MovieService manager;
     static Scanner scanner=new Scanner(System.in);
 
     public MovieController(){
-        manager=new MovieManager();
+        manager=new MovieService();
+    }
+
+    public MovieService getManager() {
+        return manager;
     }
 
     public void start(){
@@ -26,7 +33,7 @@ public class MovieController {
     }
 
     public Movie getMovieById(int id){
-        for(Movie movie: manager.movies){
+        for(Movie movie: manager.getMovies()){
             if(movie.getId()==id){
                 return movie;
             }

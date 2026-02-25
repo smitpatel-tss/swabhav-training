@@ -1,9 +1,11 @@
-package com.tss.LibraryManagement;
+package com.tss.LibraryManagement.test;
+import com.tss.LibraryManagement.service.LibraryService;
+
 import static com.tss.utils.GlobalConstants.scanner;
 import static com.tss.utils.Validate.*;
 
-public class LibraryApp {
-    static Library myLibrary=new Library();
+public class LibraryMainApp {
+    static LibraryService myLibraryService =new LibraryService();
     public static void main(String[] args) {
         while(true){
             displayMenu();
@@ -18,25 +20,25 @@ public class LibraryApp {
 
             switch (choice){
                 case 1:
-                    myLibrary.addBook();
+                    myLibraryService.addBook();
                     break;
                 case 2:
-                    myLibrary.addMember();
+                    myLibraryService.addMember();
                     break;
                 case 3:
-                    myLibrary.borrowBook();
+                    myLibraryService.borrowBook();
                     break;
                 case 4:
-                    myLibrary.displayBooks(myLibrary.books);
+                    myLibraryService.displayBooks(myLibraryService.getAllBooks());
                     break;
                 case 5:
-                    myLibrary.displayMembers();
+                    myLibraryService.displayMembers();
                     break;
                 case 6:
-                    myLibrary.displayBooksBorrowedByMember();
+                    myLibraryService.displayBooksBorrowedByMember();
                     break;
                 case 7:
-                    myLibrary.searchBorrower();
+                    myLibraryService.searchBorrower();
                     break;
                 case 8:
                     System.out.println("EXITING...");

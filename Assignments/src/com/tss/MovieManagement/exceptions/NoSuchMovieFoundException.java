@@ -1,4 +1,4 @@
-package com.tss.MovieManagement;
+package com.tss.MovieManagement.exceptions;
 
 public class NoSuchMovieFoundException extends Exception{
     @Override

@@ -1,21 +1,28 @@
-package com.tss.LibraryManagement;
+package com.tss.LibraryManagement.service;
 
+import com.tss.LibraryManagement.model.Member;
 import com.tss.LibraryManagement.customExceptions.BookNotAvailableException;
 import com.tss.LibraryManagement.customExceptions.BookNotFoundException;
 import com.tss.LibraryManagement.customExceptions.MemberNotFoundException;
+import com.tss.LibraryManagement.database.LibraryDatabase;
+import com.tss.LibraryManagement.model.Book;
+import com.tss.LibraryManagement.model.Categories;
 
 import java.util.*;
 
 import static com.tss.utils.GlobalConstants.scanner;
 import static com.tss.utils.Validate.*;
 
-public class Library {
-    public Set<String> emails = new HashSet<>();
-    public List<Member> members = new ArrayList<>();
-    public List<Book> books = new ArrayList<>();
-    public HashMap<Book, Member> borrowedBooks = new HashMap<>();
-    public HashMap<Member, List<Book>> booksBorrowedByMember = new HashMap<>();
+public class LibraryService {
+    private LibraryDatabase myLibraryDatabase;
 
+    public LibraryService(){
+        this.myLibraryDatabase =new LibraryDatabase();
+    }
+
+    public List<Book> getAllBooks(){
+        return myLibraryDatabase.getBooks();
+    }
 
     public void addBook() {
         System.out.print("Enter Title: ");
@@ -26,7 +33,7 @@ public class Library {
 
         Categories category = getCategory();
 
-        books.add(new Book(title, author, category));
+        myLibraryDatabase.getBooks().add(new Book(title, author, category));
     }
 
     public Categories getCategory() {
@@ -57,12 +64,12 @@ public class Library {
                 System.out.print("Enter Email: ");
                 String email = validateEmail();
 
-                if (emails.contains(email)) {
+                if (myLibraryDatabase.getEmails().contains(email)) {
                     throw new RuntimeException("Email Already Exists!");
                 }
                 System.out.println("Member Added Successfully");
-                members.add(new Member(name, email));
-                emails.add(email);
+                myLibraryDatabase.getMembers().add(new Member(name, email));
+                myLibraryDatabase.getEmails().add(email);
                 return;
             } catch (Exception e) {
                 System.out.println(e.getMessage());
@@ -71,12 +78,12 @@ public class Library {
     }
 
     public void displayMembers() {
-        if (members.isEmpty()) {
+        if (myLibraryDatabase.getMembers().isEmpty()) {
             System.out.println("No Members are entered yet!");
             return;
         }
         System.out.println("Members:");
-        for (Member member : members) {
+        for (Member member : myLibraryDatabase.getMembers()) {
             System.out.println(member);
         }
     }
@@ -94,40 +101,40 @@ public class Library {
     }
 
     public void searchBorrower() {
-        if (borrowedBooks.isEmpty()) {
+        if (myLibraryDatabase.getBorrowedBooks().isEmpty()) {
             System.out.println("No books are Borrowed yet!");
             return;
         }
         Book book = getBookFromId();
-        if (!borrowedBooks.containsKey(book)) {
+        if (!myLibraryDatabase.getBorrowedBooks().containsKey(book)) {
             System.out.println("Book is Not Borrowed Yet!");
             return;
         }
-        System.out.println(borrowedBooks.get(book));
+        System.out.println(myLibraryDatabase.getBorrowedBooks().get(book));
     }
 
     public void borrowBook() {
-        if (books.isEmpty()) {
+        if (myLibraryDatabase.getBooks().isEmpty()) {
             System.out.println("Enter Books First!");
             return;
         }
-        if (members.isEmpty()) {
+        if (myLibraryDatabase.getMembers().isEmpty()) {
             System.out.println("Enter Members First!");
             return;
         }
-        displayBooks(books);
+        displayBooks(myLibraryDatabase.getBooks());
         System.out.println("\n-------Choose a Book From Above");
         Book myBook = getBookFromId();
         try {
-            if (borrowedBooks.containsKey(myBook)) {
+            if (myLibraryDatabase.getBorrowedBooks().containsKey(myBook)) {
                 throw new BookNotAvailableException("Book is Currently Unavailable!");
             }
 
             Member member = getMemberFromId();
-            List<Book> takenBooks = booksBorrowedByMember.getOrDefault(member, new ArrayList<>());
+            List<Book> takenBooks = myLibraryDatabase.getBooksBorrowedByMember().getOrDefault(member, new ArrayList<>());
             takenBooks.add(myBook);
-            booksBorrowedByMember.put(member, takenBooks);
-            borrowedBooks.put(myBook, member);
+            myLibraryDatabase.getBooksBorrowedByMember().put(member, takenBooks);
+            myLibraryDatabase.getBorrowedBooks().put(myBook, member);
             System.out.println(myBook.getTitle() + " is Borrowed by " + member.getName() + " Successfully...");
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
@@ -135,18 +142,18 @@ public class Library {
     }
 
     public void displayBooksBorrowedByMember() {
-        if (members.isEmpty()) {
+        if (myLibraryDatabase.getMembers().isEmpty()) {
             System.out.println("Enter Member First!");
             return;
         }
         displayMembers();
         System.out.println("\n-------Choose a Member From Above");
         Member member = getMemberFromId();
-        if (!booksBorrowedByMember.containsKey(member)) {
+        if (!myLibraryDatabase.getBooksBorrowedByMember().containsKey(member)) {
             System.out.println(member.getName() + " Not Borrowed Any Book.");
             return;
         }
-        displayBooks(booksBorrowedByMember.get(member));
+        displayBooks(myLibraryDatabase.getBooksBorrowedByMember().get(member));
     }
 
     public Member getMemberFromId() {
@@ -155,7 +162,7 @@ public class Library {
             try {
                 System.out.print("\nEnter Member Id: ");
                 int id = validatePositiveInt();
-                for (Member member : members) {
+                for (Member member : myLibraryDatabase.getMembers()) {
                     if (member.getId() == id) {
                         return member;
                     }
@@ -174,7 +181,7 @@ public class Library {
                 System.out.print("\nEnter Book Id: ");
                 int id = validatePositiveInt();
 
-                for (Book book : books) {
+                for (Book book : myLibraryDatabase.getBooks()) {
                     if (book.getId() == id) {
                         return book;
                     }
